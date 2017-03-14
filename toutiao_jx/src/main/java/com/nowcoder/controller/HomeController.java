@@ -1,5 +1,6 @@
 package com.nowcoder.controller;
 
+import com.nowcoder.model.HostHolder;
 import com.nowcoder.model.News;
 import com.nowcoder.model.User;
 import com.nowcoder.model.ViewObject;
@@ -27,13 +28,16 @@ public class HomeController {
     private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
     @Autowired
-    private NewsService newsService;
+    NewsService newsService;
+
+//    @Autowired
+//    ToutiaoService toutiaoService;
 
     @Autowired
-    private ToutiaoService toutiaoService;
+    UserService userService;
 
     @Autowired
-    private UserService userService;
+    HostHolder hostHolder;
 
 //    //首页通过模板显示
 //    @RequestMapping(path = {"/", "/index"}, method = {RequestMethod.GET, RequestMethod.POST})
@@ -55,29 +59,16 @@ public class HomeController {
     }
     @RequestMapping(path = {"/", "/index"}, method = {RequestMethod.GET, RequestMethod.POST})//访问首页能看到连接
     public String index(Model model) {
-        model.addAttribute("vos",getNews(0,0,10));
+        model.addAttribute("vos",getNews(0,0,10));//打开首页的位置
         return "home";
     }
 
     @RequestMapping(path = {"/user/{userId}"}, method = {RequestMethod.GET, RequestMethod.POST})//访问user也能看到链接
-    public String userindex(Model model,@PathVariable("userId") int userId) {
+    public String userindex(Model model,@PathVariable("userId") int userId,
+                            @RequestParam(value = "pop",defaultValue = "0")int pop) {
         model.addAttribute("vos",getNews(userId,0,10));
+        model.addAttribute("pop",pop);//pop是从前端参数解析出来的
         return "home";
     }
-
-//    @RequestMapping(path = {"/", "/index"}, method = {RequestMethod.GET, RequestMethod.POST})
-//    public String index(@RequestParam(value = "userId", defaultValue = "0") int userId,
-//                        Model model) {
-//        model.addAttribute("vos", getNews(0, 0, 10));
-//
-//        return "home";
-//    }
-//
-//    @RequestMapping(path = {"/user/{userId}/"}, method = {RequestMethod.GET, RequestMethod.POST})
-//    public String userIndex(@PathVariable("userId") int userId, Model model) {
-//
-//        model.addAttribute("vos", getNews(userId, 0, 10));
-//        return "home";
-//    }
 
 }
