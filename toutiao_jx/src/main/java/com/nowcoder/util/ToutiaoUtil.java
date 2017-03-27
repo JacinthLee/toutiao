@@ -15,6 +15,20 @@ import java.util.Map;
 public class ToutiaoUtil {
     private static final Logger logger = LoggerFactory.getLogger(ToutiaoUtil.class);
 
+    public static String QINIU_DOMAIN_PREFIX="http://omt0kdvi1.bkt.clouddn.com/";//七牛外链默认域名,申请下来的七牛存储的前缀
+    public static String TOUTIAO_DOMAIN="http://127.0.0.1:8080/";
+    public static String IMAGE_DIR="D:/WorkSpace/IntelliJ_WorkSpace/styles/images/";//图片存放在D:/WorkSpace/IntelliJ_WorkSpace/styles/images/
+
+    public static String[] IMAGE_FILE_EXT=new String[]{"png","bmp","jpg","jpeg"};
+
+    public static boolean isFileAllowed(String fileExt){
+        for(String ext:IMAGE_FILE_EXT){
+            if(ext.equals(fileExt)){
+                return true;
+            }
+        }
+        return false;
+    }
     public static String getJSONString(int code) {//服务器返回前端，判断服务调用成不成功，一般用code表示服务器有没有正常的入库等功能。
                                                   // 有时服务器是正常返回的，但返回的服务器没有真正的执行正确。统一标准一般返回为0表示正确。
         JSONObject json = new JSONObject();

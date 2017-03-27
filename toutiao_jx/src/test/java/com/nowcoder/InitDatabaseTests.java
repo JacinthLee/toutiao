@@ -1,12 +1,12 @@
 package com.nowcoder;
-
+/*
+* 测试，跑出来的结果在SQL中看*/
+import com.nowcoder.dao.CommentDAO;
 import com.nowcoder.dao.LoginTicketDAO;
 import com.nowcoder.dao.NewsDAO;
 import com.nowcoder.dao.UserDAO;
-import com.nowcoder.model.LoginTicket;
-import com.nowcoder.model.News;
+import com.nowcoder.model.*;
 
-import com.nowcoder.model.User;
 import com.sun.org.apache.xml.internal.security.Init;
 import org.junit.Assert;
 import org.junit.Test;
@@ -36,6 +36,9 @@ public class InitDatabaseTests {
     @Autowired
     LoginTicketDAO loginTicketDAO;
 
+    @Autowired
+    CommentDAO commentDAO;
+
     @Test
     public void InitDataBase() {
         Random random = new Random();
@@ -60,6 +63,17 @@ public class InitDatabaseTests {
             newsDAO.addNews(news);
             System.out.println(news.getId());
 
+            for(int j=0;j<3;j++){//测试：给每条新闻增加三条评论
+                Comment comment=new Comment();
+                comment.setUserId(i+1);
+                comment.setEntityId(news.getId());//表示新闻的Id
+                comment.setEntityType(EntityType.ENTITY_NEWS);//做一个枚举，或是做一个静态的类，里面都是静态变量。eg:model中的EntityType
+                comment.setStatus(0);//评论一条评论或是评论一个人,在这里加类型
+                comment.setCreatedDate(new Date());//日期写为了今天
+                comment.setContent("Comment"+String.valueOf(j));//内容是：Comment123
+                commentDAO.addComment(comment);
+            }
+
             user.setPassword("newpassword");
             userDAO.updatePassword(user);
 
@@ -79,5 +93,7 @@ public class InitDatabaseTests {
 
         Assert.assertEquals(1, loginTicketDAO.selectByTicket("TICKET1").getUserId());
         Assert.assertEquals(2, loginTicketDAO.selectByTicket("TICKET1").getStatus());
+
+        Assert.assertNotNull(commentDAO.selectByEntity(1,EntityType.ENTITY_NEWS).get(0));
     }
 }
