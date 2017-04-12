@@ -1,10 +1,12 @@
 package com.nowcoder.util;
 
 import com.alibaba.fastjson.JSON;
+import com.nowcoder.controller.IndexController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import redis.clients.jedis.*;
 
 import java.util.List;
@@ -21,7 +23,7 @@ public class JedisAdapter implements InitializingBean {
         System.out.println(String.format("%d,%s", index, obj.toString()));
     }
 
-    public static void main(String[] args) {
+    public static void mainx(String[] args) {
         Jedis jedis = new Jedis();
         jedis.flushAll();
         // get,set
@@ -86,7 +88,7 @@ public class JedisAdapter implements InitializingBean {
         print(24, jedis.sinter(likeKey1, likeKey2));
         print(25, jedis.sismember(likeKey1, "12"));
         print(26, jedis.sismember(likeKey2, "12"));
-        jedis.srem(likeKey1, "5");//删掉集合
+        jedis.srem(likeKey1, "5");
         print(27, jedis.smembers(likeKey1));
         // 从1移动到2
         jedis.smove(likeKey2, likeKey1, "14");
@@ -147,9 +149,8 @@ public class JedisAdapter implements InitializingBean {
         JedisPool pool = new JedisPool();
         for (int i = 0; i < 100; ++i) {
             Jedis j = pool.getResource();
-            j.get("a");//取一条可用的资源
-            //System.out.println("POOL"+i);
-            j.close();//用完关掉
+            j.get("a");
+            j.close();
         }
     }
 
@@ -159,19 +160,14 @@ public class JedisAdapter implements InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
         //jedis = new Jedis("localhost");
-        pool = new JedisPool("localhost", 6379);//对象在初始化之后把pool初始化
-    }
-
-    private Jedis getJedis() {//获取一个
-        //return jedis;
-        return pool.getResource();//通过集合的概念实现“赞和踩”
+        pool = new JedisPool("localhost", 6379);
     }
 
     public String get(String key) {
         Jedis jedis = null;
         try {
             jedis = pool.getResource();
-            return getJedis().get(key);
+            return jedis.get(key);
         } catch (Exception e) {
             logger.error("发生异常" + e.getMessage());
             return null;
@@ -196,7 +192,7 @@ public class JedisAdapter implements InitializingBean {
         }
     }
 
-    public long sadd(String key, String value) {//把点赞的用户集合到发布的用户下面
+    public long sadd(String key, String value) {
         Jedis jedis = null;
         try {
             jedis = pool.getResource();
@@ -206,7 +202,7 @@ public class JedisAdapter implements InitializingBean {
             return 0;
         } finally {
             if (jedis != null) {
-                jedis.close();//不管怎么样都要关掉
+                jedis.close();
             }
         }
     }
@@ -226,7 +222,7 @@ public class JedisAdapter implements InitializingBean {
         }
     }
 
-    public boolean sismember(String key, String value) {//点赞数
+    public boolean sismember(String key, String value) {
         Jedis jedis = null;
         try {
             jedis = pool.getResource();
@@ -241,7 +237,7 @@ public class JedisAdapter implements InitializingBean {
         }
     }
 
-    public long scard(String key) {//集合里面有多少人
+    public long scard(String key) {
         Jedis jedis = null;
         try {
             jedis = pool.getResource();
@@ -301,8 +297,6 @@ public class JedisAdapter implements InitializingBean {
         }
     }
 
-    //在Redis中存储一个对象，通过JSONString的方式帮它序列化(存进去)与反序列化（取出来）。
-    //序列化
     public void setObject(String key, Object obj) {
         set(key, JSON.toJSONString(obj));
     }
@@ -314,4 +308,5 @@ public class JedisAdapter implements InitializingBean {
         }
         return null;
     }
+
 }

@@ -1,27 +1,49 @@
 #parse("header.html")
+    <link rel="stylesheet" type="text/css" href="/styles/detail-letter.css">
     <div id="main">
         <div class="container">
             <ul class="letter-chatlist">
                 #foreach($msg in $messages)
                 <li id="msg-item-4009580">
-                    <a class="list-head">
-                        <img alt="头像" src="$!{msg.headUrl}">
-                    </a>
-                    <div class="tooltip fade right in">
-                        <div class="tooltip-arrow"></div>
-                        <div class="tooltip-inner letter-chat clearfix">
-                            <div class="letter-info">
-                                <p class="letter-time">$date.format('yyyy-MM-dd HH:mm:ss', $!{msg.message.createdDate})</p>
-                                <a href="javascript:void(0);" id="del-link" name="4009580">删除</a>
-                            </div>
-                            <p class="chat-content">
-                                $!{msg.message.content}
-                            </p>
-                        </div>
-                    </div>
-                </li>
+            <a class="list-head" href="/user/$!{msg.userId}">
+            <img alt="头像" src="$!{msg.headUrl}">
+            </a>
+            <div class="tooltip fade right in">
+            <div class="tooltip-arrow"></div>
+            <div class="tooltip-inner letter-chat clearfix">
+            <div class="letter-info">
+            <p class="letter-time">$date.format('yyyy-MM-dd HH:mm:ss', $!{msg.message.createdDate})</p>
+            <a href="javascript:void(0);" class="del-link" name="4009580" data-id=$!{msg.message.id}>删除</a>
+            </div>
+            <p class="chat-content">
+                $!{msg.message.content}
+            </p>
+            </div>
+            </div>
+            </li>
                 #end
-</ul>
+            </ul>
+            <div class="mask-delete">
+                <div id="delete-model">
+                    <div class="modal-header">
+                        <button type="button" class="close">×</button>
+                        <h4 class="modal-title" id="my-modal-label">
+                            提示
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        确定要删除这条信息吗？
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default"
+                                data-dismiss="modal">关闭
+                        </button>
+                        <button type="button" class="btn btn-danger btn-del">
+                            确定
+                        </button>
+                    </div>
+                </div>
+            </div>
 
         </div>
         <script type="text/javascript">

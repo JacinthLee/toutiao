@@ -1,0 +1,20 @@
+#delete-model {
+    border-radius: 6px;
+    height: 30%;
+    width: 50%;
+    top: 28%;
+    left: 25%;
+    position: relative;
+    background-color: #FFFFFF;
+}
+.mask-delete {
+    display: none;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    position: absolute;
+    margin: 0 0;
+    z-index: 99;
+    background-color: rgba(0, 0, 0, .3);
+}

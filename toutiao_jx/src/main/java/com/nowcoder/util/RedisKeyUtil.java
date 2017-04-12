@@ -22,3 +22,4 @@ public class RedisKeyUtil {
         return BIZ_DISLIKE + SPLIT + String.valueOf(entityType) + SPLIT + String.valueOf(entityId);
     }
 }
+

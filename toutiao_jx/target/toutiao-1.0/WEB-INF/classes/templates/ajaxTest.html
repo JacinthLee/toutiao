@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        div.two {
+            background: gold;
+            width: 200px;
+            height: 300px;;
+        }
+        div.one {
+            background: green;
+            width: 200px;
+            height: 300px;;
+        }
+    </style>
+</head>
+<script src="/scripts/jquery.js"></script>
+<script>
+    $(function () {
+        $("div:first").on("click",function () {
+            $.ajax({
+                url:"/pt?name=Yom&age=20",
+                dataType:"json",
+                method:"get",
+                success:function (data) {
+                    $("div").html(data.name+":"+data.age);
+                },
+                error:function (data) {
+                    console.log(data);
+                }
+            });
+        });
+        $("div:last").on("click",function () {
+            $.ajax({
+                url:"/getScript",
+                dataTye:"script",
+                success:function (data) {
+                    eval(data);
+                }
+            });
+        });
+    });
+</script>
+<body>
+<div class="two">
+</div>
+<div class="one"></div>
+</body>
+</html>
